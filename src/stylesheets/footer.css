@@ -1,0 +1,47 @@
+.footer {
+  font-family: Be Vietnam Pro;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25.3px;
+  letter-spacing: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px 0px;
+  margin-top: 100px;
+}
+
+.footer-line {
+  margin-bottom: 30px;
+  width: 80vw;
+  border: 0.5px solid black;
+}
+
+.privacy-policy-url {
+  text-decoration: none;
+  color: rgb(92, 88, 88);
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+  margin-left: 30px;
+  cursor: pointer; /* 👈 Add this to show it's clickable */
+}
+
+.privacy-policy-url:hover {
+  color: black;
+  text-decoration: underline; /* 👈 Add underline on hover */
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 20px 10px;
+    text-align: center;
+  }
+
+  .privacy-policy-url {
+    margin-left: 10px;
+    display: block;
+    margin-top: 10px;
+  }
+}
+
+

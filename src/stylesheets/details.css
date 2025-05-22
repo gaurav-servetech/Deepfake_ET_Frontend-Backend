@@ -1,0 +1,66 @@
+.deepfake-detection-modalities {
+  width: 100%;
+  max-width: 1180px;
+  margin: 150px auto 100px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.deepfake-detection-modalities-details {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.deepfake-detection-modalities-details > span {
+  color: #3a5ed3;
+}
+
+.modality-specs {
+  width: 100%;
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 0 10px;
+}
+
+.modality-specs > div {
+  flex: 0 0 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modality-specs > p {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.logo-deepfake-modality {
+  width: 60px;
+  height: auto;
+}
+
+/* Responsive styles */
+/* Tighten spacing further on smaller screens */
+@media (max-width: 480px) {
+  .deepfake-detection-modalities {
+    margin-top: 60px;
+  }
+
+  .modality-specs {
+    padding: 0 10px;
+  }
+
+  .modality-specs > p {
+    font-size: 0.9rem;
+  }
+}

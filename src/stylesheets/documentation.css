@@ -1,0 +1,110 @@
+.documentation-button-and-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 60px 20px;
+  background-color: #e8e8e8; /* Updated to match navbar bg */
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+
+.documentation-buttons {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.documentation-buttons-pointer {
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.documentation-buttons-pointer:hover {
+  color: #000;
+  font-weight: 500;
+  transform: scale(1.1);
+}
+
+.documentation {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.documentation h2 {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 60px 0 20px;
+  border-bottom: none; /* remove previous border if needed */
+  padding-bottom: 8px;
+  color: #1a3760; /* updated color */
+  text-decoration: underline; /* underline the text */
+}
+
+.doc-sub-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 30px;
+  color: #1a3760;
+}
+
+.doc-sub-details {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #555;
+  margin: 10px 0 20px;
+}
+
+.doc-list-container,
+.doc-para-container {
+  margin-top: 40px;
+}
+
+.doc-list {
+  padding-left: 25px;
+  margin-top: 20px;
+}
+
+.doc-list-items {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.doc-list-items > span {
+  font-weight: 600;
+  color:  #1a3760;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .documentation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .documentation-buttons-pointer {
+    font-size: 16px;
+  }
+
+  .documentation h2 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .doc-sub-title {
+    font-size: 20px;
+  }
+
+  .doc-sub-details {
+    font-size: 16px;
+    text-align: center;
+  }
+}

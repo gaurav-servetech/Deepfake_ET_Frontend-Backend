@@ -1,0 +1,100 @@
+/* === NAV CONTAINER === */
+#nav-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* === NAV BAR === */
+#nav {
+  width: 100%;
+  max-width: 1200px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* aligns API button to right */
+  position: relative; /* needed for centering logo absolutely */
+  height: 80px; /* give it some height for centering */
+}
+
+/* === LOGO + TAGLINE CENTERED === */
+.nav-logo-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar-logo {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+.tagline {
+  font-size: 14px;
+  color: black;
+  font-weight: 500;
+  margin-top: 4px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* === API BUTTON === */
+.documentation-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #d9d9d9;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.documentation-button:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+/* === NAVBAR LINE === */
+.nav-line {
+  width: 90%;
+  margin: 20px auto 0 auto;
+  border: 0.5px solid black;
+}
+
+/* === RESPONSIVE STYLES === */
+@media (max-width: 768px) {
+  #nav {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .nav-logo-container {
+    position: static;
+    transform: none;
+    margin-top: 10px;
+  }
+
+  .documentation-button {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .navbar-logo {
+    width: 100px;
+  }
+
+  .tagline {
+    font-size: 12px;
+  }
+}

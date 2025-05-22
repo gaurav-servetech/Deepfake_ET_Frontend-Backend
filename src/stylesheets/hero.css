@@ -1,0 +1,81 @@
+.hero-section {
+  height: 578px;
+  width: 1183px;
+  margin-left: 150px;
+  margin-top: 70px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 20px; 
+  width: 100%;
+  max-width: 1180px;
+  margin: 70px auto 0 auto;
+  padding: 0 20px;
+  gap: 30px;
+}
+
+.hero-main-title {
+  font-size: 64px;
+  font-weight: 700;
+  color: black;
+}
+
+.hero-main-title > span {
+  color: #f45976;
+}
+
+.hero-sub-title {
+  color: #9498a2;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.upload-file-button {
+  height: 65px;
+  width: 290px;
+  border-radius: 25px;
+  border: none;
+  background-color: #336aea;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25.3px;
+  letter-spacing: 0%;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s;
+}
+
+.upload-file-button:hover {
+  scale: 1.15;
+}
+
+.upload-file-button:active {
+  scale: 0.95;
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    margin-top: 50px;
+    padding: 0 15px;
+    height: auto;
+  }
+
+  .hero-main-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .hero-sub-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .upload-file-button {
+    width: 100%;
+    font-size: 1rem;
+    padding: 14px 20px;
+    max-width: 300px;
+  }
+}
