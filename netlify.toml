@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/deepfake"
+  to = "/deepfake/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/api/*"
   to = "http://103.80.163.237:5051/:splat"
   status = 200
