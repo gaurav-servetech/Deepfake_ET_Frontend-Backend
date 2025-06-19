@@ -1,46 +1,80 @@
 .footer {
-  font-family: Be Vietnam Pro;
+  width: 100vw;
+  font-family: Be Vietnam Pro, Inter, Arial, sans-serif;
   font-weight: 400;
-  font-size: 20px;
-  line-height: 25.3px;
-  letter-spacing: 0%;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  padding: 30px 0px;
-  margin-top: 100px;
+  align-items: stretch;
+  padding: 0;
+  margin: 0 0 4px 0;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(52,152,219,0.04);
+  border-radius: 0 0 18px 18px;
 }
 
 .footer-line {
-  margin-bottom: 30px;
-  width: 80vw;
-  border: 0.5px solid black;
+  margin: 0 auto 10px auto;
+  width: 92vw;
+  max-width: 1700px;
+  border: 0.5px solid #e0e0e0;
+  background: #e0e0e0;
+  height: 1px;
+}
+
+.footer-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 92vw;
+  max-width: 1700px;
+  margin: 0 auto 8px auto;
+  padding: 6px 18px;
+  box-sizing: border-box;
+}
+
+.footer-row span {
+  color: #222;
+  font-size: 15px;
+  margin-left: 12px;
 }
 
 .privacy-policy-url {
   text-decoration: none;
-  color: rgb(92, 88, 88);
-  transition: color 0.3s ease, text-decoration 0.3s ease;
-  margin-left: 30px;
-  cursor: pointer; /* 👈 Add this to show it's clickable */
+  color: #555;
+  font-size: 15px;
+  margin-right: 12px;
+  transition: color 0.3s, text-decoration 0.3s;
+  cursor: pointer;
 }
 
 .privacy-policy-url:hover {
-  color: black;
-  text-decoration: underline; /* 👈 Add underline on hover */
+  color: #2176c7;
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
-  .footer {
-    padding: 20px 10px;
-    text-align: center;
+  .footer-line, .footer-row {
+    width: 98vw;
+    max-width: 100vw;
   }
-
+  .footer-row {
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    padding: 6px 6vw;
+  }
+  .footer-row span {
+    font-size: 13px;
+    margin-left: 2vw;
+  }
   .privacy-policy-url {
-    margin-left: 10px;
-    display: block;
-    margin-top: 10px;
+    font-size: 13px;
+    margin-right: 2vw;
   }
 }
 

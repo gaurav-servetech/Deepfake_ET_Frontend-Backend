@@ -18,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename="/deepfake">  {/* 👈 THIS IS THE IMPORTANT FIX */}
+    <Router basename="/deepfake">
       {isLoading ? <Preloader /> : (
         <div>
           <Routes>
