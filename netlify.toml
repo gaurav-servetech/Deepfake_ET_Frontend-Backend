@@ -1,18 +1,18 @@
 [[redirects]]
-  from = "/deepfake"
-  to = "/deepfake/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/api/*"
-  to = "http://103.80.163.237:5051/:splat"
+  from = "/api1/*"
+  to = "http://103.22.140.216:5051/:splat"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/deepfake/*"
-  to = "/deepfake/index.html"
+  from = "/api2/*"
+  to = "http://103.22.140.216:5000/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
 
 [[headers]]

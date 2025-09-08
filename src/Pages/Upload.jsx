@@ -6,6 +6,7 @@ import upload from "../assets/img/Upload.png";
 import io from "socket.io-client";
 import Chart from 'chart.js/auto';
 import PropTypes from 'prop-types';
+import { FiUpload } from "react-icons/fi";
 
 const Upload = () => {
   const socketRef = useRef(null);
@@ -13,11 +14,57 @@ const Upload = () => {
   const [file, setFile] = useState(null);
   const [videoResult, setVideoResult] = useState(null);
   const [audioResult, setAudioResult] = useState(null);
+  const [faceResult, setFaceResult] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [fileName, setFileName] = useState("");
   const [progress, setProgress] = useState(0);
+  const [videoUrl, setVideoUrl] = useState("");
+  const handleUrlCheck = async () => {
+    setError(null);
+    setFileName("");
+    setVideoResult(null);
+    setAudioResult(null);
+    setFaceResult(null);
+    setProgress(0);
+    setUploading(true);
+    setProcessing(true);
+
+    let simulatedProgress = 0;
+    const progressInterval = setInterval(() => {
+      simulatedProgress += Math.random() * 10;
+      if (simulatedProgress < 95) {
+        setProgress(Math.min(95, simulatedProgress));
+      } else {
+        setProgress(95);
+      }
+    }, 500);
+
+    try {
+      const res = await fetch("https://deepfake-check-jpx9.onrender.com/deepfake-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: videoUrl }),
+      });
+
+      if (!res.ok) {
+        throw new Error("URL analysis failed");
+      }
+
+      const data = await res.json();
+      setFaceResult(data.face_result);
+      setAudioResult(data.audio_result);
+      setVideoResult(data.face_result); // Use face_result as videoResult for consistency
+      setProgress(100);
+    } catch (err) {
+      setError("Error analyzing URL. Please try again.");
+    } finally {
+      clearInterval(progressInterval);
+      setUploading(false);
+      setProcessing(false);
+    }
+  };
 
   useEffect(() => {
     socketRef.current = io("https://proxy-handler-2.onrender.com");
@@ -84,7 +131,7 @@ const Upload = () => {
       // 1. Send video for face/lips analysis
       const videoFormData = new FormData();
       videoFormData.append("file", selectedFile);
-      const videoResponse = await fetch("http://103.22.140.216:5051//predict", {
+      const videoResponse = await fetch("/api1/predict", {
         method: "POST",
         body: videoFormData,
       });
@@ -99,7 +146,7 @@ const Upload = () => {
       try {
         const convertFormData = new FormData();
         convertFormData.append("file", selectedFile);
-        const convertResponse = await fetch("http://103.22.140.216:5000/convert", {
+        const convertResponse = await fetch("/api2/convert", {
           method: "POST",
           body: convertFormData,
           headers: { 'Accept': 'application/json' },
@@ -110,14 +157,13 @@ const Upload = () => {
 
         const audioFormData = new FormData();
         audioFormData.append("file", wavBlob, "audio.wav");
-        const audioResponse = await fetch("http://103.22.140.216:5000/predict", {
+        const audioResponse = await fetch("/api2/predict", {
           method: "POST",
           body: audioFormData,
           mode: 'cors',
           credentials: 'omit',
           headers: {
             'Accept': 'application/json',
-            'Origin': 'http://localhost:5174'
           },
         });
 
@@ -144,46 +190,7 @@ const Upload = () => {
     }
   }, [audioResult]);
 
-  function ResultPieChart({ fakePercent, realPercent }) {
-    const canvasRef = useRef(null);
 
-    React.useEffect(() => {
-      if (!canvasRef.current) return;
-      const chart = new Chart(canvasRef.current, {
-        type: 'pie',
-        data: {
-          labels: ['Fake', 'Real'],
-          datasets: [
-            {
-              data: [fakePercent, realPercent],
-              backgroundColor: ['#e74c3c', '#27ae60'],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            legend: {
-              display: true,
-              position: 'bottom',
-              labels: {
-                color: '#222',
-                font: { size: 16, weight: 'bold' },
-              },
-            },
-          },
-        },
-      });
-      return () => chart.destroy();
-    }, [fakePercent, realPercent]);
-
-    return <canvas ref={canvasRef} width={220} height={220} />;
-  }
-
-  ResultPieChart.propTypes = {
-    fakePercent: PropTypes.number.isRequired,
-    realPercent: PropTypes.number.isRequired,
-  };
 
   return (
     <div>
@@ -191,26 +198,56 @@ const Upload = () => {
         <Navbar />
         <div className="upload-page">
           <p className="upload-page-title">
-            Verify before you trust. Detect deepfakes now.
+            Verify before you trust! Detect deepfakes now.
           </p>
           <p className="upload-page-sub-title">
-            Drop your video or enter a link to verify authenticity.
+            Drop your video to verify authenticity.
           </p>
-          <div className="input-container">
-            <input
-              type="url"
-              className="url-input"
-              placeholder="https://www.elevatetrust.ai"
-            />
-            <label htmlFor="fileUpload" className="upload-icon">
-              <img src={upload} alt="Upload" />
-            </label>
-            <input
-              type="file"
-              id="fileUpload"
-              className="file-upload"
-              onChange={handleFileChange}
-            />
+          <div className="upload-area">
+            {/* File Upload Section */}
+            <div className="upload-section">
+              <h3 className="section-title">Upload video file</h3>
+              <div className="input-container upload-btn-container">
+                <input
+                  type="file"
+                  id="fileUpload"
+                  className="file-upload"
+                  accept=".mp4,.mov,.avi"
+                  onChange={handleFileChange}
+                />
+                <button
+                  className="custom-upload-btn"
+                  type="button"
+                  onClick={() => document.getElementById('fileUpload').click()}
+                  disabled={uploading || processing}
+                >
+                  <FiUpload size={24} style={{ marginRight: '8px' }} />
+                  <span className="custom-upload-btn-text">Upload</span>
+                </button>
+              </div>
+              <div className="file-format-info">
+                Accepted formats: .mp4, .mov, .avi
+              </div>
+            </div>
+            {/* Direct URL Section */}
+            <div className="url-section">
+              <h3 className="section-title">Or enter direct video URL</h3>
+              <div className="url-input-container">
+                <input
+                  type="url"
+                  className="url-input"
+                  placeholder="https://your-video-url.com"
+                  value={videoUrl}
+                  onChange={e => setVideoUrl(e.target.value)}
+                />
+                <button className="custom-upload-btn" onClick={handleUrlCheck} disabled={!videoUrl || uploading || processing}>
+                  <span className="custom-upload-btn-text">Check</span>
+                </button>
+              </div>
+              <div className="file-format-info">
+                Accepted links: YouTube, Instagram and LinkedIn videos
+              </div>
+            </div>
           </div>
 
           {fileName && <p className="file-name">Selected File: {fileName}</p>}
@@ -228,7 +265,8 @@ const Upload = () => {
             </div>
           )}
 
-          {videoResult && (
+          {/* Show face/lips results if videoResult is present and (audioResult is present OR (audioResult is null and not uploading/processing)) */}
+          {videoResult && (audioResult || (audioResult === null && !uploading && !processing)) && (
             <div className="results-container video-results-flex">
               <div className="video-results-main">
                 <h2>
@@ -273,25 +311,11 @@ const Upload = () => {
                   </table>
                 )}
               </div>
-              <div className="video-results-pie">
-                <ResultPieChart
-                  fakePercent={parseFloat(videoResult.overall_result.match(/([\d.]+)/)?.[0] || 0)}
-                  realPercent={100 - parseFloat(videoResult.overall_result.match(/([\d.]+)/)?.[0] || 0)}
-                />
-                <div className="confidence-score-label">
-                  Confidence Score
-                </div>
-              </div>
             </div>
           )}
 
-          {videoResult && audioResult === null && (
-            <div className="no-audio-message">
-              Video contains no audio.
-            </div>
-          )}
-
-          {audioResult && (
+          {/* Show audio results only if both are present */}
+          {videoResult && audioResult && (
             <div className="results-container audio-results">
               <h2>Audio Analysis Results</h2>
               <div className="audio-results-flex">
@@ -300,17 +324,7 @@ const Upload = () => {
                   <div className="audio-overall-flex">
                     <div className="audio-overall-main">
                       <div className="audio-fake">
-                        Fake ({((audioResult.fake_segments / audioResult.segment_count) * 100).toFixed(2)}%)
-                      </div>
-                      <div className="audio-confidence">
-                        Average Fake Confidence: {
-                          (() => {
-                            const fakeSegs = audioResult.segment_predictions.filter(seg => seg.prediction === 'Fake');
-                            if (fakeSegs.length === 0) return '0.0%';
-                            const avgFakeConf = fakeSegs.reduce((sum, seg) => sum + seg.confidence, 0) / fakeSegs.length;
-                            return (avgFakeConf * 100).toFixed(1) + '%';
-                          })()
-                        }
+                        Fake Audio({((audioResult.fake_segments / audioResult.segment_count) * 100).toFixed(2)}%)
                       </div>
                     </div>
                     <div className="audio-gauge">
@@ -351,19 +365,29 @@ const Upload = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {audioResult.segment_predictions.map((seg, index) => (
-                        <tr key={index}>
-                          <td>{`${index * 2}-${(index + 1) * 2}`}</td>
-                          <td className={seg.prediction === 'Fake' ? 'audio-fake' : 'audio-real'}>
-                            {seg.prediction}
-                          </td>
-                          <td>{(seg.confidence * 100).toFixed(1)}%</td>
-                        </tr>
-                      ))}
+                      {audioResult.segment_predictions
+                        .map((seg, index) => ({ ...seg, index }))
+                        .filter(seg => seg.prediction === 'Fake')
+                        .map((seg) => (
+                          <tr key={seg.index}>
+                            <td>{`${seg.index * 2}-${(seg.index + 1) * 2}`}</td>
+                            <td className={seg.prediction === 'Fake' ? 'audio-fake' : 'audio-real'}>
+                              {seg.prediction}
+                            </td>
+                            <td>{(seg.confidence * 100).toFixed(1)}%</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Show 'no audio' message only if videoResult is present, audioResult is null, and not uploading/processing */}
+          {videoResult && audioResult === null && !uploading && !processing && (
+            <div className="no-audio-message">
+              Video contains no audio.
             </div>
           )}
         </div>
