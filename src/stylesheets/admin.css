@@ -1,0 +1,81 @@
+/* src/stylesheets/admin.css */
+
+/* adjust this value if your navbar height changes */
+:root {
+    --admin-nav-height: 88px; /* try 88px first, reduce to 72 or increase as needed */
+  }
+  
+  /* spacer that sits below the fixed nav (used in Admin.jsx) */
+  .admin-nav-spacer {
+    height: var(--admin-nav-height);
+    width: 100%;
+  }
+  
+  /* admin panel container styling (keeps layout clean) */
+  .admin-panel {
+    max-width: 1100px;
+    margin: 0 auto 4rem; /* top margin handled by spacer */
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 22px rgba(15,23,42,0.06);
+  }
+  
+  /* controls + search */
+  .admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  /* search input */
+  .admin-search {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+    min-width: 260px;
+  }
+  
+  /* table layout */
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .users-table th, .users-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #f1f1f1;
+    vertical-align: middle;
+  }
+  
+  .users-table th {
+    font-size: 0.95rem;
+    color: #4b5563;
+    font-weight: 700;
+  }
+  
+  /* buttons */
+  .user-action-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .block-btn { background: #ef4444; color: white; }
+  .unblock-btn { background: #10b981; color: white; }
+  .role-btn { background: #3b82f6; color: white; }
+  
+  /* small helper */
+  .small-muted { color: #6b7280; font-size: 0.9rem; }
+  
+  /* responsive tweaks */
+  @media (max-width: 900px) {
+    .admin-panel { padding: 0.75rem; margin: calc(var(--admin-nav-height) + 1rem) 1rem 2rem; }
+    .users-table th, .users-table td { padding: 10px; font-size: 0.95rem; }
+  }
+  

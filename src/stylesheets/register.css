@@ -1,0 +1,145 @@
+/* src/stylesheets/register.css */
+
+/* Keep variables in sync with login stylesheet for consistency */
+:root{
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #4f46e5;
+    --accent-600: #4338ca;
+    --danger: #ef4444;
+    --shadow: 0 6px 18px rgba(15,23,42,0.08);
+    --radius-lg: 14px;
+    --radius-sm: 8px;
+    --gap: 16px;
+    --max-width: 520px;
+  }
+  
+  /* Page layout */
+  .register-center {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(180deg, #f7fbff 0%, var(--bg) 100%);
+    padding: 36px 20px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #0f172a;
+  }
+  
+  /* Card */
+  .register-card {
+    width: 100%;
+    max-width: var(--max-width);
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 28px;
+    border: 1px solid rgba(15,23,42,0.04);
+  }
+  
+  /* Header */
+  .register-card h2 {
+    margin: 0 0 6px 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  
+  .register-sub {
+    margin: 0 0 18px 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  
+  /* Common form styles (match login) */
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  
+  .form-label {
+    font-size: 0.9rem;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(15,23,42,0.08);
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(250,250,251,0.9));
+    font-size: 0.95rem;
+    outline: none;
+    transition: box-shadow 170ms ease, border-color 170ms ease, transform 120ms ease;
+    box-shadow: 0 1px 0 rgba(15,23,42,0.02);
+  }
+  
+  .form-input::placeholder { color: #9ca3af; }
+  
+  .form-input:focus {
+    border-color: var(--accent-600);
+    box-shadow: 0 6px 20px rgba(79,70,229,0.08);
+    transform: translateY(-1px);
+  }
+  
+  /* Primary button */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-600));
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 0.98rem;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    box-shadow: 0 8px 20px rgba(79,70,229,0.14);
+  }
+  
+  .btn-primary:active { transform: translateY(1px) scale(0.997); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+  
+  /* Notice messages */
+  .msg-success {
+    color: #065f46;
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.08);
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .msg-error {
+    color: var(--danger);
+    background: rgba(239,68,68,0.06);
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(239,68,68,0.08);
+    margin-bottom: 12px;
+  }
+  
+  /* Footer row */
+  .form-footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  
+  /* Small screens */
+  @media (max-width: 560px) {
+    .register-card { padding: 20px; border-radius: 12px; }
+    :root { --max-width: 96vw; }
+  }
+  
