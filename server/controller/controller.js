@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const User = require('../models/User');
+const User = require('../models/user');
 const auth = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'CLIENT_SECRET_KEY';
