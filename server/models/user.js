@@ -8,6 +8,16 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum:["user" , "admin"], default: 'user' },
   isBlocked: { type: Boolean, default: false },
   blockedUntil: { type: Date, default: null },
-}, { timestamps: true });
+  // --- forgot/reset fields ---
+  resetOTPHash: { type: String, default: null },           // hashed OTP (one-time)
+  resetOTPExpiry: { type: Date, default: null },           // OTP expiry timestamp
+  resetOTPAttempts: { type: Number, default: 0 },          // throttle attempts
+
+  passwordResetTokenHash: { type: String, default: null }, // hashed reset token after OTP verification
+  passwordResetTokenExpiry: { type: Date, default: null }, // reset token expiry
+},
+{
+  timestamps: true
+});
 
 module.exports = mongoose.model('User', userSchema);

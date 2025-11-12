@@ -1,0 +1,319 @@
+/*Login Page Split Layout */
+
+:root {
+  --accent: #0ea5e9;
+  --accent-dark: #0284c7;
+  --text-dark: #1e293b;
+  --text-light: #6b7280;
+  --bg-light: #f7fbff;
+  --card-bg: #ffffff;
+  --shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
+  --radius-lg: 14px;
+  --radius-sm: 8px;
+}
+
+/* Full Page Layout  */
+.full-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: linear-gradient(180deg, #e0f7ff 0%, var(--bg) 100%);
+}
+
+/* Left Side (Intro Section)  */
+.left-side {
+  flex: 1;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.left-content {
+  max-width: 400px;
+  animation: fadeIn 1.2s ease;
+}
+
+.left-content h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.left-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.highlight {
+  font-weight: 600;
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Right Side (Login Form) */
+.right-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-light);
+  padding: 50px 30px;
+}
+
+/* Login Card */
+.login-card {
+  background: var(--card-bg);
+  padding: 40px 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(14, 165, 233, 0.08);
+  animation: slideUp 0.7s ease;
+}
+
+.login-card h2 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: #f9fcff;
+  font-size: 0.95rem;
+  transition: 0.25s;
+}
+
+.form-input:focus {
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Login Button - LEFT aligned text + optional icon */
+.btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.2);
+
+  /* Left align the content */
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 10px;
+  /* Add left padding to give breathing room */
+  padding-left: 20px;
+}
+
+/* If you want the visual text to start slightly more center-like when icon absent,
+   use a left padding that works with your overall card — 20px is a good start. */
+
+.btn:hover {
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+  transform: translateY(-2px);
+}
+
+/* Optional icon inside button:
+   In JSX render: <button className="btn"><span className="btn-icon">🔒</span><span>Login</span></button>
+*/
+.btn .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  min-height: 20px;
+  font-size: 16px;
+}
+
+/* Links & Footer */
+.help-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.help-link:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.small {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Forgot Password Button */
+.forgot-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.forgot-btn:hover {
+  color: #0056b3;
+}
+
+/* Modal styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end; /* buttons aligned right */
+  gap: 10px; /* spacing between buttons */
+  margin-top: 15px;
+}
+/* Centered Login Button with icon */
+.btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.2);
+
+  /* center align icon + text */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; /* ✅ centers horizontally */
+  text-align: center;
+  gap: 8px;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+  transform: translateY(-2px);
+}
+
+.btn .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+
+.btn.small-btn {
+  padding: 8px 16px;
+}
+
+.btn.cancel-btn {
+  background-color: #ccc;
+  color: #000;
+}
+
+.btn.cancel-btn:hover {
+  background-color: #aaa;
+}
+
+/* Toastify Override */
+.Toastify__toast-theme--colored.Toastify__toast--success {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.Toastify__toast-theme--colored.Toastify__toast--error {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .full-page {
+    flex-direction: column;
+    padding-top: 80px; /* keep space for navbar */
+  }
+
+  .left-side {
+    display: none;
+  }
+
+  .right-side {
+    padding: 40px 20px;
+  }
+
+  .login-card {
+    max-width: 90%;
+    padding: 32px 24px;
+  }
+}

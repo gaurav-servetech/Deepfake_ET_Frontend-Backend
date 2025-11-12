@@ -1,0 +1,201 @@
+/* 🌤 Register Page - Full Layout Sky Blue Theme */
+
+:root {
+  --bg: #f0faff;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #0ea5e9;
+  --accent-600: #0284c7;
+  --danger: #ef4444;
+  --shadow: 0 8px 24px rgba(14, 165, 233, 0.12);
+  --radius-lg: 14px;
+  --radius-sm: 8px;
+}
+
+/* Wrapper layout */
+.register-wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: linear-gradient(180deg, #e0f7ff 0%, var(--bg) 100%);
+}
+
+/* Left section */
+.register-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: linear-gradient(120deg, var(--accent), var(--accent-600));
+  color: white;
+}
+
+.register-intro {
+  max-width: 400px;
+  text-align: center;
+}
+
+.register-intro h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.register-intro p {
+  font-size: 1rem;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.register-illustration {
+  width: 100%;
+  max-width: 300px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* 🧾 Right side form */
+.register-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  border: 1px solid rgba(14, 165, 233, 0.08);
+  transition: 0.3s ease;
+}
+
+.register-card:hover {
+  transform: translateY(-3px);
+}
+
+.register-card h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.register-sub {
+  color: var(--muted);
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
+/* Inputs */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: #f9fcff;
+  font-size: 0.95rem;
+  transition: 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--accent-600);
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Button */
+.btn-primary {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-600));
+  color: white;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.18);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, var(--accent-600), var(--accent));
+  transform: translateY(-1px);
+}
+
+/* Footer */
+.form-footer {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.form-footer a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  color: var(--accent-600);
+}
+
+/* Toastify Overrides */
+.Toastify__toast {
+  border-radius: 12px !important;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(90deg, #22c55e, #16a34a) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.25);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(90deg, #ef4444, #dc2626) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25);
+}
+
+.Toastify__progress-bar {
+  background: white !important;
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .register-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .register-left {
+    display: none;
+  }
+
+  .register-right {
+    padding: 30px 20px;
+  }
+}

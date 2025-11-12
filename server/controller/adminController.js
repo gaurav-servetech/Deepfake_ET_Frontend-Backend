@@ -11,21 +11,43 @@ async function listUsers(req, res) {
   }
 }
 
+// controllers/adminController.js
 async function blockUser(req, res) {
   try {
     const { id } = req.params;
-    const { minutes } = req.body;
+    // Defensive: ensure req.body is an object so destructuring won't throw
+    const body = req.body || {};
+    const { minutes, expiresAt } = body;
+
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    let blockedUntil = null;
+    if (expiresAt) {
+      const dt = new Date(expiresAt);
+      if (isNaN(dt.getTime())) return res.status(400).json({ success: false, message: 'Invalid expiresAt' });
+      if (dt <= new Date()) return res.status(400).json({ success: false, message: 'expiresAt must be in the future' });
+      blockedUntil = dt;
+    } else if (typeof minutes !== 'undefined') {
+      const m = Number(minutes);
+      if (!Number.isFinite(m) || m <= 0) return res.status(400).json({ success: false, message: 'minutes must be a positive number' });
+      blockedUntil = new Date(Date.now() + m * 60000);
+    } else {
+      // no body -> indefinite block (blockedUntil stays null)
+      blockedUntil = null;
+    }
+
     user.isBlocked = true;
-    user.blockedUntil = minutes && Number(minutes) > 0 ? new Date(Date.now() + Number(minutes) * 60000) : null;
+    user.blockedUntil = blockedUntil;
     await user.save();
-    return res.json({ success: true });
+
+    return res.json({ success: true, blockedUntil });
   } catch (err) {
-    console.error(err);
+    console.error('blockUser error:', err);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 }
+
 
 async function unblockUser(req, res) {
   try {
