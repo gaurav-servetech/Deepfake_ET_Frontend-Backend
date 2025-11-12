@@ -35,10 +35,29 @@ app.use(express.json());
 app.use(cookieParser());
 
 // CORS: allow frontend origin and credentials
+
+
+const allowed = [
+  process.env.FRONTEND_URL,                     // your Hostinger domain (set later)
+  process.env.FRONTEND_URL && `https://www.${process.env.FRONTEND_URL.replace(/^https?:\/\//,'')}`,
+  process.env.RENDER_EXTERNAL_URL,              // optional: Render gives you a service URL
+  'http://localhost:3000',                      // CRA dev server
+  'http://127.0.0.1:3000'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
-  credentials: true,
+  origin: function(origin, cb) {
+    // allow requests with no origin (like mobile apps or curl)
+    if (!origin) return cb(null, true);
+    if (allowed.indexOf(origin) !== -1) return cb(null, true);
+    return cb(new Error('CORS blocked by server'), false);
+  },
+  credentials: true
 }));
+// app.use(cors({
+//   origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+//   credentials: true,
+// }));
 
 app.use('/api/auth', auth);
 app.use('/api/admin', adminRoute)
