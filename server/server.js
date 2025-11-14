@@ -1,40 +1,40 @@
-// // server.js (or app.js)
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const cookieParser = require('cookie-parser');
-// const cors = require('cors');
-// require('dotenv').config();
-// const auth = require("./routers/auth-route");
-// const adminRoute = require('./routers/admin')
-// const uploadRoute = require('./routers/upload');
+// server.js (or app.js)
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+require('dotenv').config();
+const auth = require("./routers/auth-route");
+const adminRoute = require('./routers/admin')
+const uploadRoute = require('./routers/upload');
 
-// const app = express();
-// const PORT = process.env.PORT || 5000;
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-// mongoose.connect(process.env.MONGO_URI).then(() => console.log('mongoDB connected')).catch(e => console.error(e));
+mongoose.connect(process.env.MONGO_URI).then(() => console.log('mongoDB connected')).catch(e => console.error(e));
 
-// app.use(express.json());
-// app.use(cookieParser());
+app.use(express.json());
+app.use(cookieParser());
 
-// // CORS: allow frontend origin and credentials
-// app.use(cors({
-//   origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
-//   credentials: true,
-// }));
+// CORS: allow frontend origin and credentials
+app.use(cors({
+  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+  credentials: true,
+}));
 
-// app.use('/api/auth', auth);
-// app.use('/api/admin', adminRoute)
-// app.use('/api', uploadRoute)
+app.use('/api/auth', auth);
+app.use('/api/admin', adminRoute)
+app.use('/api', uploadRoute)
 
-// // example protected admin route
-// app.get('/api/admin/data', require('./middleware/auth').authMiddleware, require('./middleware/auth').adminOnly, (req, res) => {
-//   res.json({ secret: 'admin only data' });
-// });
+// example protected admin route
+app.get('/api/admin/data', require('./middleware/auth').authMiddleware, require('./middleware/auth').adminOnly, (req, res) => {
+  res.json({ secret: 'admin only data' });
+});
 
-// app.listen(PORT, () => console.log('server running on', PORT));
+app.listen(PORT, () => console.log('server running on', PORT));
 
 
-
+// --------------------------------------------------------------------------------------------
 // // server.js (updated for CORS)
 // const express = require('express');
 // const mongoose = require('mongoose');
@@ -170,81 +170,81 @@
 // });
 
 // app.listen(PORT, () => console.log('server running on', PORT));
+// ------------------------------------------------------------------------------------------------------
 
+// // server.js
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cookieParser = require('cookie-parser');
+// const cors = require('cors');
+// require('dotenv').config();
 
-// server.js
-const express = require('express');
-const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-require('dotenv').config();
+// // Routers
+// const auth = require("./routers/auth-route");
+// const adminRoute = require('./routers/admin');
+// const uploadRoute = require('./routers/upload');
 
-// Routers
-const auth = require("./routers/auth-route");
-const adminRoute = require('./routers/admin');
-const uploadRoute = require('./routers/upload');
+// const app = express();
+// const PORT = 5000; // backend runs on 5000 (frontend is 5175)
 
-const app = express();
-const PORT = 5000; // backend runs on 5000 (frontend is 5175)
+// // Connect MongoDB
+// const uri = process.env.MONGO_URI;
+// if (!uri) {
+//   console.error('❌ MONGO_URI not set in .env');
+//   process.exit(1);
+// }
 
-// Connect MongoDB
-const uri = process.env.MONGO_URI;
-if (!uri) {
-  console.error('❌ MONGO_URI not set in .env');
-  process.exit(1);
-}
+// mongoose.connect(uri)
+//   .then(() => console.log('✅ MongoDB connected'))
+//   .catch(err => console.error('❌ MongoDB connection error:', err));
 
-mongoose.connect(uri)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+// mongoose.connection.on('connected', () => console.log('Mongoose connected'));
+// mongoose.connection.on('error', (err) => console.error('Mongoose error:', err));
+// mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected'));
 
-mongoose.connection.on('connected', () => console.log('Mongoose connected'));
-mongoose.connection.on('error', (err) => console.error('Mongoose error:', err));
-mongoose.connection.on('disconnected', () => console.log('Mongoose disconnected'));
+// app.use(express.json());
+// app.use(cookieParser());
 
-app.use(express.json());
-app.use(cookieParser());
+// // ✅ Fixed CORS — allow only your frontend on port 5175
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   credentials: true,
+// }));
 
-// ✅ Fixed CORS — allow only your frontend on port 5175
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true,
-}));
+// // ✅ Middleware for preflight requests (OPTIONAL but safe)
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+//   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+//   res.header('Access-Control-Allow-Credentials', 'true');
+//   if (req.method === 'OPTIONS') {
+//     return res.sendStatus(204);
+//   }
+//   next();
+// });
 
-// ✅ Middleware for preflight requests (OPTIONAL but safe)
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-});
+// // ✅ Routes
+// app.use('/api/auth', auth);
+// app.use('/api/admin', adminRoute);
+// app.use('/api', uploadRoute);
 
-// ✅ Routes
-app.use('/api/auth', auth);
-app.use('/api/admin', adminRoute);
-app.use('/api', uploadRoute);
+// // ✅ Example protected admin route
+// app.get('/api/admin/data',
+//   require('./middleware/auth').authMiddleware,
+//   require('./middleware/auth').adminOnly,
+//   (req, res) => {
+//     res.json({ secret: 'admin only data' });
+//   }
+// );
 
-// ✅ Example protected admin route
-app.get('/api/admin/data',
-  require('./middleware/auth').authMiddleware,
-  require('./middleware/auth').adminOnly,
-  (req, res) => {
-    res.json({ secret: 'admin only data' });
-  }
-);
+// // ✅ Error handler (useful for debugging CORS)
+// app.use((err, req, res, next) => {
+//   console.error('Unhandled error:', err.message || err);
+//   if (err && err.message && err.message.includes('CORS')) {
+//     return res.status(403).json({ message: err.message });
+//   }
+//   res.status(500).json({ message: 'Internal server error' });
+// });
 
-// ✅ Error handler (useful for debugging CORS)
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err.message || err);
-  if (err && err.message && err.message.includes('CORS')) {
-    return res.status(403).json({ message: err.message });
-  }
-  res.status(500).json({ message: 'Internal server error' });
-});
-
-// ✅ Start server
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+// // ✅ Start server
+// app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
