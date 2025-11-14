@@ -1,195 +1,395 @@
-/* src/stylesheets/admin.css */
+/* ===============================
+      PREMIUM ADMIN PANEL UI
+================================= */
 
-/* adjust this value if your navbar height changes */
+/* Navbar spacing */
 :root {
-  --admin-nav-height: 88px; /* try 88px first, reduce to 72 or increase as needed */
+  --admin-nav-height: 88px;
+  --radius: 12px;
+  --shadow: 0 6px 22px rgba(15,23,42,0.08);
+  --muted: #6b7280;
+  --primary-1: #6366f1;
+  --primary-2: #4f46e5;
+  --danger: #ef4444;
+  --success: #10b981;
+  --light-bg: #f9fafb;
 }
 
-/* spacer that sits below the fixed nav (used in Admin.jsx) */
+/* Spacer under fixed navbar */
 .admin-nav-spacer {
   height: var(--admin-nav-height);
-  width: 100%;
 }
 
-/* admin panel container styling (keeps layout clean) */
+/* ===============================
+      ADMIN PANEL WRAPPER
+================================= */
 .admin-panel {
-  max-width: 1100px;
-  margin: 0 auto 4rem; /* top margin handled by spacer */
-  padding: 1.25rem;
+  max-width: 1150px;
+  margin: 1.5rem auto 4rem;
+  padding: 1.5rem 1.25rem;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 22px rgba(15,23,42,0.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.35s ease;
 }
 
-/* controls + search */
+/* fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===============================
+      HEADER + SEARCH + FILTERS
+================================= */
 .admin-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 1rem;
+  gap: 14px;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
 }
 
-/* search input */
-.admin-search {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
-  min-width: 260px;
-}
-
-/* table layout */
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.users-table th, .users-table td {
-  padding: 12px 14px;
-  text-align: left;
-  border-bottom: 1px solid #f1f1f1;
-  vertical-align: middle;
-}
-
-.users-table th {
-  font-size: 0.95rem;
-  color: #4b5563;
+.admin-controls h2 {
+  margin: 0;
+  font-size: 1.4rem;
   font-weight: 700;
 }
 
-/* buttons */
+.small-muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* search */
+.admin-search {
+  padding: 10px 13px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  min-width: 260px;
+  background: #fff;
+  transition: 0.2s ease;
+}
+
+.admin-search:focus {
+  border-color: var(--primary-1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+  outline: none;
+}
+
+/* filter dropdown */
+.filter-select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: var(--primary-1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+}
+
+/* ===============================
+            TABLE DESIGN
+================================= */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.users-table thead {
+  background: #f3f4f6;
+}
+
+.users-table th {
+  padding: 14px;
+  font-size: 0.92rem;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.users-table td {
+  padding: 14px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 0.95rem;
+}
+
+/* animated row */
+.users-table tbody tr {
+  animation: rowFadeIn 0.35s ease forwards;
+  opacity: 0;
+}
+
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.users-table tbody tr:hover {
+  background: #f9fafb;
+  transition: 0.2s ease;
+  transform: scale(1.01);
+}
+
+/* ===============================
+            STATUS BADGES
+================================= */
+.status-badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.active-badge {
+  background: rgba(16,185,129,0.15);
+  color: var(--success);
+}
+
+.blocked-badge {
+  background: rgba(239,68,68,0.15);
+  color: var(--danger);
+}
+
+/* ===============================
+        ACTION BUTTONS
+================================= */
 .user-action-btn {
   padding: 8px 12px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-weight: 600;
+  font-size: 14px;
+  transition: 0.25s ease;
 }
 
-.block-btn { background: #ef4444; color: white; }
-.unblock-btn { background: #10b981; color: white; }
-.role-btn { background: #3b82f6; color: white; }
-
-/* small helper */
-.small-muted { color: #6b7280; font-size: 0.9rem; }
-
-/* responsive tweaks */
-@media (max-width: 900px) {
-  .admin-panel { padding: 0.75rem; margin: calc(var(--admin-nav-height) + 1rem) 1rem 2rem; }
-  .users-table th, .users-table td { padding: 10px; font-size: 0.95rem; }
+/* glow hover */
+.user-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(99,102,241,0.45);
 }
 
+/* button colors */
+.block-btn {
+  background: var(--danger);
+  color: #fff;
+}
 
-/* === MODAL OVERLAY === */
+.unblock-btn {
+  background: var(--success);
+  color: #fff;
+}
+
+.role-btn {
+  background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
+  color: #fff;
+}
+
+/* ===============================
+          PAGINATION
+================================= */
+.pagination {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pg-btn {
+  padding: 8px 15px;
+  background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pg-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(99,102,241,0.45);
+}
+
+.pg-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pg-info {
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ===============================
+          MODAL OVERLAY
+================================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0,0,0,0.55);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  pointer-events: all;
 }
 
-/* Disable background interactions (optional: add/remove this class on <body>) */
-body.modal-open {
-  overflow: hidden !important;
-}
-
-/* === MODAL BOX === */
+/* ===============================
+            MODAL BOX
+================================= */
 .modal-container {
-  background: #ffffff;
-  padding: 24px 28px;
+  background: #fff;
+  padding: 26px 30px;
   border-radius: 16px;
   max-width: 420px;
   width: 90%;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-  text-align: left;
-  animation: popup 0.25s ease;
-  z-index: 10000;
+  box-shadow: 0 22px 50px rgba(0,0,0,0.25);
+  animation: popIn 0.3s ease;
 }
 
-@keyframes popup {
-  from {
-    transform: scale(0.95);
-    opacity: 0.6;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+@keyframes popIn {
+  from { transform: scale(0.94); opacity: 0.5; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
-/* Text styles */
 .modal-title {
+  margin-bottom: 6px;
   font-size: 1.3rem;
-  margin: 0 0 8px;
-  color: #111827;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .modal-subtext {
-  margin-bottom: 16px;
-  color: #6b7280;
+  color: var(--muted);
   font-size: 14px;
+  margin-bottom: 18px;
 }
 
-/* Input */
 .modal-input {
   width: 100%;
-  margin-top: 6px;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #d1d5db;
-  font-size: 14px;
 }
 
 .modal-input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
-  outline: none;
+  border-color: var(--primary-1);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
 }
 
-/* Actions */
+/* modal buttons */
 .modal-actions {
-  margin-top: 20px;
+  margin-top: 22px;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
 .btn.primary {
-  background: linear-gradient(90deg, #6366f1, #4f46e5);
-  color: white;
-  border: none;
-  font-weight: 600;
+  background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
   padding: 10px 16px;
   border-radius: 8px;
-  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  border: none;
 }
 
 .btn.ghost {
   background: transparent;
   border: 1px solid #d1d5db;
-  color: #374151;
-  font-weight: 500;
   padding: 10px 16px;
   border-radius: 8px;
-  cursor: pointer;
+  color: #374151;
 }
 
-.btn.primary:hover {
-  opacity: 0.9;
-}
-
+.btn.primary:hover,
 .btn.ghost:hover {
-  background: rgba(0, 0, 0, 0.03);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(99,102,241,0.35);
 }
 
-/* small responsive adjustments for modal */
-@media (max-width: 520px) {
-  .modal-container { padding: 18px; border-radius: 12px; }
-  .modal-input { font-size: 13px; }
+/* ===============================
+   HORIZONTAL SCROLL (TABLE WRAP)
+================================= */
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===============================
+      RESPONSIVE BREAKPOINTS
+================================= */
+
+/* Tablet (1024px) */
+@media (max-width: 1024px) {
+  .users-table {
+    width: max-content !important;
+    min-width: 900px !important;
+  }
+}
+
+/* Small Tablet / Large Mobile (768px) */
+@media (max-width: 768px) {
+  .admin-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .admin-search,
+  .filter-select {
+    width: 100%;
+  }
+}
+
+/* Mobile (600px) */
+@media (max-width: 600px) {
+  .admin-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 1rem 0.5rem !important;
+    padding: 1rem !important;
+  }
+
+  .users-table {
+    min-width: 750px !important;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .user-action-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Small Mobile (480px) */
+@media (max-width: 480px) {
+  .modal-container {
+    width: 90%;
+    padding: 18px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
 }

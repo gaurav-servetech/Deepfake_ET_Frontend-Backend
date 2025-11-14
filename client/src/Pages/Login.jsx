@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../stylesheets/navbar.css";
 import "../stylesheets/Login.css";
 import "../stylesheets/Footer.css";
-// import "../stylesheets/popup.css";
+
 import { FiLogIn } from "react-icons/fi";
 
 export default function Login() {

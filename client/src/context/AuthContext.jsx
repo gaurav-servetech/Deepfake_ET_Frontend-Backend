@@ -110,13 +110,75 @@ export function AuthProvider({ children }){
     }
   };
 
+  // ---------- Password reset helpers (forgot / verify OTP / reset) ----------
+  // Call api.post('/auth/forgot-password', { email })
+  const forgotPassword = async (email) => {
+    dispatch({ type: ACTIONS.LOADING });
+    try {
+      const res = await api.post('/auth/forgot-password', { email });
+      // keep current user state unchanged; we just want to present result to UI
+      dispatch({ type: ACTIONS.SUCCESS, payload: { user: state.user } });
+      return res.data;
+    } catch (err) {
+      const payload = err.response?.data || { message: 'Failed' };
+      dispatch({ type: ACTIONS.FAILURE, payload });
+      return payload;
+    }
+  };
+
+  // Call api.post('/auth/verify-otp', { email, otp })
+  const verifyOtp = async (email, otp) => {
+    dispatch({ type: ACTIONS.LOADING });
+    try {
+      const res = await api.post('/auth/verify-otp', { email, otp });
+      dispatch({ type: ACTIONS.SUCCESS, payload: { user: state.user } });
+      return res.data;
+    } catch (err) {
+      const payload = err.response?.data || { message: 'OTP verification failed' };
+      dispatch({ type: ACTIONS.FAILURE, payload });
+      return payload;
+    }
+  };
+
+  // Call api.post('/auth/reset-password', { email, resetToken, newPassword })
+  const resetPassword = async (email, resetToken, newPassword) => {
+    dispatch({ type: ACTIONS.LOADING });
+    try {
+      const res = await api.post('/auth/reset-password', { email, resetToken, newPassword });
+      // after password reset, clear local auth state to force re-login
+      dispatch({ type: ACTIONS.LOGOUT });
+      return res.data;
+    } catch (err) {
+      const payload = err.response?.data || { message: 'Reset failed' };
+      dispatch({ type: ACTIONS.FAILURE, payload });
+      return payload;
+    }
+  };
+  // -------------------------------------------------------------------------
+
   useEffect(() => {
     // run once at mount
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <AuthContext.Provider value={{ ...state, register, login, logout, checkAuth }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        ...state,
+        register,
+        login,
+        logout,
+        checkAuth,
+        // newly exposed functions:
+        forgotPassword,
+        verifyOtp,
+        resetPassword
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth(){ const ctx = useContext(AuthContext); if(!ctx) throw new Error('useAuth must be used inside AuthProvider'); return ctx; }

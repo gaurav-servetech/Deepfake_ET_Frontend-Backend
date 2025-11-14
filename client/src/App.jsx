@@ -78,7 +78,9 @@ import Admin from "./Pages/Admin"
 import { useAuth } from './context/AuthContext';
 import RequireAuth from './components/RequireAuth';
 import Blocked from './Pages/Blocked';
-import ForgotPasswordPage from './Pages/ForgotPasswordPage';
+import ForgotPasswordPage from '../src/Pages/ForgotPasswordPage'
+import LinkUpload from './Pages/LinkUpload';
+
 
 function App(){
   const { isLoading } = useAuth();
@@ -92,6 +94,13 @@ function App(){
           <Upload />
         </RequireAuth>
       } />
+
+    <Route path="/link-upload" element={
+        <RequireAuth allowedRoles={['user']}>
+        <LinkUpload />
+          </RequireAuth>
+      } />
+
       <Route path="/admin" element={
         <RequireAuth allowedRoles={['admin']}>
           <Admin />
@@ -102,6 +111,7 @@ function App(){
          <Route path="/negative" element={<Negative />} />
          <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
         // in your Routes
       <Route path="/blocked" element={<Blocked />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
