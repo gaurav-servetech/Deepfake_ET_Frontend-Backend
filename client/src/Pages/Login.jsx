@@ -6,9 +6,8 @@ import Footer from "../components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../stylesheets/navbar.css";
-import "../stylesheets/Login.css";
-import "../stylesheets/Footer.css";
-
+import "../stylesheets/login.css";
+import "../stylesheets/footer.css";
 import { FiLogIn } from "react-icons/fi";
 
 export default function Login() {
