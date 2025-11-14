@@ -51,7 +51,7 @@ export default function AdminPanel() {
     setActionLoadingId(userId);
     try {
       if (block) {
-        await api.post(`/admin/block/${userId}`, {}); // explicit empty body
+        await api.post(`/admin/block/${userId}`, {});
       } else {
         await api.post(`/admin/unblock/${userId}`);
       }
@@ -63,20 +63,19 @@ export default function AdminPanel() {
       setActionLoadingId(null);
     }
   };
-  
 
   const openTempBlockModal = (userId) => {
     setModalUserId(userId);
     setSelectedDatetime("");
     setIsModalOpen(true);
-    document.body.style.overflow = "hidden"; // disable background scroll
+    document.body.classList.add("modal-open");
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setModalUserId(null);
     setSelectedDatetime("");
-    document.body.style.overflow = "auto"; // re-enable scroll
+    document.body.classList.remove("modal-open");
   };
 
   const submitTempBlock = async () => {
@@ -109,9 +108,11 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-panel">
+
+      {/* Controls */}
       <div className="admin-controls">
         <div>
-          <h2 style={{ margin: 0 }}>Users</h2>
+          <h2>Users</h2>
           <div className="small-muted">
             Manage registered users — search, block/unblock, set temporary block, change role.
           </div>
@@ -134,9 +135,11 @@ export default function AdminPanel() {
         </div>
       </div>
 
+      {/* Table */}
       {loading ? (
         <div style={{ padding: 20 }}>Loading users...</div>
       ) : (
+        <div className="table-scroll">
         <table className="users-table">
           <thead>
             <tr>
@@ -148,45 +151,59 @@ export default function AdminPanel() {
               <th>Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={6} style={{ padding: 20 }}>
-                  No users found.
-                </td>
+                <td colSpan={6} style={{ padding: 20 }}>No users found.</td>
               </tr>
             )}
+
             {filtered.map((u) => (
               <tr key={u._id}>
                 <td>{u.userName || "-"}</td>
                 <td>{u.email}</td>
-                <td>{u.role}</td>
+
+                <td>
+                  <span
+                    className="status-badge"
+                    style={{
+                      background:
+                        u.role === "admin" ? "rgba(99,102,241,0.15)" : "rgba(59,130,246,0.15)",
+                      color: u.role === "admin" ? "#4f46e5" : "#3b82f6",
+                    }}
+                  >
+                    {u.role}
+                  </span>
+                </td>
+
                 <td>
                   {u.isBlocked ? (
-                    <span style={{ color: "#ef4444" }}>Blocked</span>
+                    <span className="status-badge blocked-badge">Blocked</span>
                   ) : (
-                    <span style={{ color: "#10b981" }}>Active</span>
+                    <span className="status-badge active-badge">Active</span>
                   )}
                 </td>
+
                 <td>{u.blockedUntil ? new Date(u.blockedUntil).toLocaleString() : "-"}</td>
 
-                <td className="actions-cell">
-                  <div className="action-buttons" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <td>
+                  <div className="action-buttons" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {u._id !== myId && (
                       <>
                         {u.role === "user" ? (
                           <button
                             className="user-action-btn role-btn"
-                            onClick={() => changeRole(u._id, "admin")}
                             disabled={actionLoadingId === u._id}
+                            onClick={() => changeRole(u._id, "admin")}
                           >
                             Promote
                           </button>
                         ) : (
                           <button
                             className="user-action-btn role-btn"
-                            onClick={() => changeRole(u._id, "user")}
                             disabled={actionLoadingId === u._id}
+                            onClick={() => changeRole(u._id, "user")}
                           >
                             Demote
                           </button>
@@ -197,8 +214,8 @@ export default function AdminPanel() {
                     {u.isBlocked ? (
                       <button
                         className="user-action-btn unblock-btn"
-                        onClick={() => toggleBlock(u._id, false)}
                         disabled={actionLoadingId === u._id}
+                        onClick={() => toggleBlock(u._id, false)}
                       >
                         Unblock
                       </button>
@@ -206,19 +223,19 @@ export default function AdminPanel() {
                       <>
                         <button
                           className="user-action-btn block-btn"
-                          onClick={() => toggleBlock(u._id, true)}
                           disabled={actionLoadingId === u._id}
+                          onClick={() => toggleBlock(u._id, true)}
                         >
                           Block
                         </button>
 
-                        <button
-                          className="user-action-btn role-btn"
-                          onClick={() => openTempBlockModal(u._id)}
-                          disabled={actionLoadingId === u._id}
-                        >
-                          Set Temp Block
-                        </button>
+                          <button
+                            className="user-action-btn role-btn"
+                            disabled={actionLoadingId === u._id}
+                            onClick={() => openTempBlockModal(u._id)}
+                          >
+                            Set Temp Block
+                          </button>
                       </>
                     )}
                   </div>
@@ -227,9 +244,10 @@ export default function AdminPanel() {
             ))}
           </tbody>
         </table>
+</div>
       )}
 
-      {/* ======= MODAL ======= */}
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -237,19 +255,19 @@ export default function AdminPanel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeModal} // click outside to close
+            onClick={closeModal}
           >
             <motion.div
               className="modal-container"
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.92, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.92, opacity: 0 }}
               transition={{ duration: 0.25 }}
-              onClick={(e) => e.stopPropagation()} // prevent close on inside click
+              onClick={(e) => e.stopPropagation()}
             >
               <h3 className="modal-title">Set Temporary Block</h3>
               <p className="modal-subtext">
-                Choose the exact date & time when this user’s block should end.
+                Choose the date & time when this user’s block should end.
               </p>
 
               <label className="modal-label">End date & time</label>
@@ -274,6 +292,7 @@ export default function AdminPanel() {
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

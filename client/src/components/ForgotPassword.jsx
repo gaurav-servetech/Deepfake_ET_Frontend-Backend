@@ -1,4 +1,3 @@
-// src/components/ForgotPasswordCard.jsx
 import React, { useEffect, useRef, useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
@@ -14,26 +13,24 @@ import {
 } from "react-icons/fi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../stylesheets/forgotpassword.css";
+import '../stylesheets/forgotpassword.css'
 
-export default function ForgotPasswordCard() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
 
-  const [step, setStep] = useState(1); // 1=email, 2=otp, 3=newpassword
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otpDigits, setOtpDigits] = useState(Array(6).fill(""));
   const [resetToken, setResetToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [showNewPw, setShowNewPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
-
   const [resendDisabled, setResendDisabled] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  const countdownRef = useRef(null);
 
+  const countdownRef = useRef(null);
   const otpRefs = useRef([]);
   otpRefs.current = Array(6)
     .fill(0)
@@ -63,7 +60,6 @@ export default function ForgotPasswordCard() {
     }, 1000);
   };
 
-  // helper: normalize OTP array -> only digits, trimmed
   function normalizeOtpArray(arr) {
     return arr.map((x) =>
       typeof x === "string" && x.trim() ? x.trim().replace(/\D/g, "") : ""
@@ -91,11 +87,8 @@ export default function ForgotPasswordCard() {
   async function verifyOtp(e) {
     e?.preventDefault();
     toast.dismiss();
-
     const normalized = normalizeOtpArray(otpDigits);
     const otp = normalized.join("");
-
-    // strict validation: exactly 6 digits
     if (!/^\d{6}$/.test(otp)) {
       toast.error("Enter the 6-digit OTP.");
       return;
@@ -161,10 +154,10 @@ export default function ForgotPasswordCard() {
     }
   };
 
-  // OTP handlers (digits-only, auto-advance, backspace)
+  // OTP handlers
   function handleOtpChange(e, idx) {
     const raw = e.target.value || "";
-    const digit = raw.replace(/\D/g, "").slice(-1); // last numeric char or ''
+    const digit = raw.replace(/\D/g, "").slice(-1);
     setOtpDigits((prev) => {
       const copy = [...prev];
       copy[idx] = digit;
@@ -175,21 +168,13 @@ export default function ForgotPasswordCard() {
     }
   }
 
-  function updateDigit(char, idx) {
-    setOtpDigits((prev) => {
-      const copy = [...prev];
-      copy[idx] = char;
-      return copy;
-    });
-  }
-
   function handleOtpKeyDown(e, idx) {
     if (e.key === "Backspace") {
       if (otpDigits[idx]) {
-        updateDigit("", idx);
+        setOtpDigits((prev) => { const copy = [...prev]; copy[idx] = ""; return copy; });
       } else if (idx > 0) {
         otpRefs.current[idx - 1]?.current?.focus();
-        updateDigit("", idx - 1);
+        setOtpDigits((prev) => { const copy = [...prev]; copy[idx - 1] = ""; return copy; });
       }
     } else if (e.key === "ArrowLeft" && idx > 0) {
       otpRefs.current[idx - 1]?.current?.focus();
@@ -202,14 +187,13 @@ export default function ForgotPasswordCard() {
     e.preventDefault();
     const pasted = (e.clipboardData || window.clipboardData).getData("text") || "";
     const digits = pasted.replace(/\D/g, "").slice(0, 6).split("");
-    if (digits.length === 0) return;
+    if (!digits.length) return;
     setOtpDigits((prev) => {
       const copy = [...prev];
       for (let i = 0; i < 6; i++) copy[i] = digits[i] ?? "";
       return copy;
     });
-    const next = Math.min(digits.length, 5);
-    setTimeout(() => otpRefs.current[next]?.current?.focus(), 60);
+    setTimeout(() => otpRefs.current[Math.min(digits.length, 5)]?.current?.focus(), 60);
   }
 
   const stepTitles = ["Email", "OTP", "New password"];
@@ -249,108 +233,56 @@ export default function ForgotPasswordCard() {
 
           <div className="fp-main">
             <motion.h2 key={step} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
-              {step === 1 && <>Forgot your password?</>}
-              {step === 2 && <>Enter the 6-digit code</>}
-              {step === 3 && <>Set a new password</>}
+              {step === 1 && "Forgot your password?"}
+              {step === 2 && "Enter the 6-digit code"}
+              {step === 3 && "Set a new password"}
             </motion.h2>
 
-            <motion.p
-              className="fp-sub"
-              key={`sub-${step}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <motion.p className="fp-sub" key={`sub-${step}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               {step === 1 && "Tell us the email for your account — we'll send a one-time code."}
               {step === 2 && "Check your inbox. Paste or type the code below."}
               {step === 3 && "Use a strong password (min 6 chars). You can view the text with the eye icon."}
             </motion.p>
 
-            {/* Step 1 */}
+            {/* Step forms */}
             {step === 1 && (
-              <motion.form
-                onSubmit={sendEmail}
-                className="fp-form"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
+              <motion.form onSubmit={sendEmail} className="fp-form" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
                 <label className="label">Email</label>
                 <div className="input-ctrl">
                   <FiMail className="left-icon" />
-                  <input
-                    type="email"
-                    placeholder="you@domain.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    autoFocus
-                  />
+                  <input type="email" placeholder="you@domain.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
                 </div>
 
                 <div className="fp-row">
-                  <button className="btn primary" type="submit" disabled={loading}>
-                    {loading ? "Sending…" : "Send code"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    onClick={() => {
-                      setEmail("");
-                      toast.info("Cleared email");
-                    }}
-                  >
-                    Clear
-                  </button>
+                  <button className="btn primary" type="submit" disabled={loading}>{loading ? "Sending…" : "Send code"}</button>
+                  <button type="button" className="btn ghost" onClick={() => { setEmail(""); toast.info("Cleared email"); }}>Clear</button>
                 </div>
               </motion.form>
             )}
 
-            {/* Step 2 */}
             {step === 2 && (
-              <motion.form
-                onSubmit={verifyOtp}
-                className="fp-form"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <div
-                  className="otp-wrap"
-                  onPaste={handleOtpPaste}
-                  role="group"
-                  aria-label="6-digit OTP"
-                >
-                  {otpDigits.map((d, i) => {
-                    const filled = !!d;
-                    return (
-                      <motion.input
-                        key={i}
-                        ref={otpRefs.current[i]}
-                        className={`otp-input ${filled ? "filled" : ""}`}
-                        inputMode="numeric"
-                        pattern="\d*"
-                        maxLength={1}
-                        value={d}
-                        onChange={(e) => handleOtpChange(e, i)}
-                        onKeyDown={(e) => handleOtpKeyDown(e, i)}
-                        aria-label={`digit ${i + 1}`}
-                        whileFocus={{ scale: 1.04 }}
-                      />
-                    );
-                  })}
+              <motion.form onSubmit={verifyOtp} className="fp-form" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
+                <div className="otp-wrap" onPaste={handleOtpPaste} role="group" aria-label="6-digit OTP">
+                  {otpDigits.map((d, i) => (
+                    <motion.input
+                      key={i}
+                      ref={otpRefs.current[i]}
+                      className={`otp-input ${d ? "filled" : ""}`}
+                      inputMode="numeric"
+                      pattern="\d*"
+                      maxLength={1}
+                      value={d}
+                      onChange={(e) => handleOtpChange(e, i)}
+                      onKeyDown={(e) => handleOtpKeyDown(e, i)}
+                      aria-label={`digit ${i + 1}`}
+                      whileFocus={{ scale: 1.04 }}
+                    />
+                  ))}
                 </div>
 
                 <div className="fp-row">
-                  <button className="btn primary" type="submit" disabled={loading}>
-                    {loading ? "Verifying…" : "Verify"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    onClick={resend}
-                    disabled={resendDisabled || loading}
-                    title="Resend code"
-                  >
+                  <button className="btn primary" type="submit" disabled={loading}>{loading ? "Verifying…" : "Verify"}</button>
+                  <button type="button" className="btn ghost" onClick={resend} disabled={resendDisabled || loading}>
                     <FiRefreshCw style={{ marginRight: 8 }} />
                     {resendDisabled ? `Resend (${countdown}s)` : "Resend"}
                   </button>
@@ -358,81 +290,32 @@ export default function ForgotPasswordCard() {
               </motion.form>
             )}
 
-            {/* Step 3 */}
             {step === 3 && (
-              <motion.form
-                onSubmit={resetPassword}
-                className="fp-form"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
+              <motion.form onSubmit={resetPassword} className="fp-form" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
                 <label className="label">New password</label>
                 <div className="input-ctrl pw">
                   <FiLock className="left-icon" />
-                  <input
-                    type={showNewPw ? "text" : "password"}
-                    placeholder="At least 6 characters"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="eye-btn"
-                    onClick={() => setShowNewPw((s) => !s)}
-                    aria-label={showNewPw ? "Hide password" : "Show password"}
-                  >
-                    {showNewPw ? <FiEyeOff /> : <FiEye />}
-                  </button>
+                  <input type={showNewPw ? "text" : "password"} placeholder="At least 6 characters" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+                  <button type="button" className="eye-btn" onClick={() => setShowNewPw((s) => !s)}>{showNewPw ? <FiEyeOff /> : <FiEye />}</button>
                 </div>
 
                 <label className="label">Confirm password</label>
                 <div className="input-ctrl pw">
-                  <input
-                    type={showConfirmPw ? "text" : "password"}
-                    placeholder="Repeat password"
-                    value={confirmPw}
-                    onChange={(e) => setConfirmPw(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    className="eye-btn"
-                    onClick={() => setShowConfirmPw((s) => !s)}
-                    aria-label={showConfirmPw ? "Hide password" : "Show password"}
-                  >
-                    {showConfirmPw ? <FiEyeOff /> : <FiEye />}
-                  </button>
+                  <input type={showConfirmPw ? "text" : "password"} placeholder="Repeat password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} required />
+                  <button type="button" className="eye-btn" onClick={() => setShowConfirmPw((s) => !s)}>{showConfirmPw ? <FiEyeOff /> : <FiEye />}</button>
                 </div>
 
                 <div className="fp-row">
-                  <button className="btn primary" type="submit" disabled={loading}>
-                    {loading ? "Resetting…" : "Set new password"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn ghost"
-                    onClick={() => {
-                      setNewPassword("");
-                      setConfirmPw("");
-                      toast.info("Cleared passwords");
-                    }}
-                  >
-                    Clear
-                  </button>
+                  <button className="btn primary" type="submit" disabled={loading}>{loading ? "Resetting…" : "Set new password"}</button>
+                  <button type="button" className="btn ghost" onClick={() => { setNewPassword(""); setConfirmPw(""); toast.info("Cleared passwords"); }}>Clear</button>
                 </div>
               </motion.form>
             )}
           </div>
 
           <div className="fp-foot">
-            <div className="fp-progress">
-              <div className="bar" style={{ width: `${(step / 3) * 100}%` }} />
-            </div>
-            <div className="fp-extra">
-              <small>Secure • One-time codes expire quickly</small>
-            </div>
+            <div className="fp-progress"><div className="bar" style={{ width: `${(step / 3) * 100}%` }} /></div>
+            <div className="fp-extra"><small>Secure • One-time codes expire quickly</small></div>
           </div>
         </div>
       </motion.div>
